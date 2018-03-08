@@ -1,0 +1,104 @@
+#!/bin/sh
+
+#!/bin/bash
+
+# SWU.2011. Bayesian
+#
+# SWU.10.
+# Add 4th argument: analysis type -- all, preproc, glm
+#
+# SWU.09.
+# Create multiple fsf's after one run's fsf is generated. 
+
+# This is a function with 3 input arguments. The first argument is for the GLM directory. 
+# The second argument is the subject ID to replace the one in the template.
+# The third argument is to indicate what type of task (lotto or food) for the current fsf.
+#
+# Each subject has a unique number and is expressed as subj_xx. example: subj_01
+# Normally, you would create fsf for the very first run and in case you run multiple sessions, for
+# the very first run in the first session. You can save this .fsf as template.fsf. 
+# The function then create fsf for each run by applying 'sed' to both session number and run number
+# in the template and replace them with the specified number and save it to a new file.
+
+model=$1/fsf
+subj=$2
+analysis_type=$3 	#analysis type: all, preproc, glm
+
+echo -n "You are creating fsf intending to run "
+if (test "$analysis_type" = "all") then
+	template_name=template2
+	echo "all steps of first-level analysis."
+elif (test "$analysis_type" = "preproc") then
+	template_name=template_preproc
+	echo "preprocessing + registration"
+else (test "$analysis_type" = "glm")
+	template_name=template_glm
+	echo "GLM"
+fi
+
+#nRuns=6
+temp_subID=CCK
+
+if (test "$subj" = "PLL") then
+       a1=(3 4 5)
+       a2=(1 2 6)
+elif (test "$subj" = "WTC") then
+       a1=(1 2 3 4)
+       a2=(5 6)	
+elif (test "$subj" = "CCK") then
+       a1=(2 3)
+       a2=(1 4 5 6)	
+elif (test "$subj" = "CXY") then
+       a1=(2 3)
+       a2=(1 4 5 6)	
+else
+	a1=(1 2 3)
+        a2=(4 5 6)
+fi
+
+
+create_fsf2() {
+echo 12
+#for run in run_1 run_2 run_3 run_4 run_5; do
+for runNO in "${a1[@]}"; do	
+	echo run_${runNO} 		
+	sed s/$temp_subID/${subj}/g ${model}/${template_name}.fsf > ${model}/temp1.fsf 		   
+	#Replace template subID with $subj and save to a temporary file
+	
+	sed s/run_1/run_${runNO}/g ${model}/temp1.fsf > ${model}/temp2.fsf		
+	#Replace run with $run in the temporary file and save to another temp file
+
+	sed s/FMAP2/FMAP1/g ${model}/temp2.fsf > ${model}/temp3.fsf		
+	#Replace run with $run in the temporary file and save to another temp file	
+
+	sed s/F1/F${runNO}/g ${model}/temp3.fsf > ${model}/${subj}_run_${runNO}_all.fsf
+
+        
+#fi
+	# Remove temp files
+	rm ${model}/temp1.fsf  ${model}/temp2.fsf ${model}/temp3.fsf 
+
+done
+
+for runNO in "${a2[@]}"; do	
+	echo run_${runNO} 		
+	sed s/$temp_subID/${subj}/g ${model}/${template_name}.fsf > ${model}/temp1.fsf 		   
+	#Replace template subID with $subj and save to a temporary file
+	
+	sed s/run_1/run_${runNO}/g ${model}/temp1.fsf > ${model}/temp2.fsf		
+	#Replace run with $run in the temporary file and save to another temp file
+
+	sed s/FMAP2/FMAP2/g ${model}/temp2.fsf > ${model}/temp3.fsf		
+#	#Replace run with $run in the temporary file and save to another temp file		
+
+	sed s/F1/F${runNO}/g ${model}/temp3.fsf > ${model}/${subj}_run_${runNO}_all.fsf
+
+
+
+	# Remove temp files
+	rm ${model}/temp1.fsf  ${model}/temp2.fsf ${model}/temp3.fsf 
+
+done
+}
+
+create_fsf2 $1 $2 $3

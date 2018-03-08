@@ -1,0 +1,32 @@
+#!/bin/sh
+#!/bin/bash
+
+# Run 2nd-level FEAT for multiple subjects.
+# CCT.2012.
+
+model=$1/fsf
+
+echo $model
+
+
+
+path=/data2/data
+filelist=$(ls $path)
+
+
+run() {
+
+#Run 2nd-level FEAT for multiple subjects
+
+#for subj in $filelist; do
+for subj in CCY CYM FYH HHY JJW KCL LTY LYH LYJ PST PTH SYK TMC WPY WTC YHC YNH CCK CHH CHY CWL CXY CYY HYC JZC NYC PLL PYL SLY SYC YCL YLG; do
+	./leave_one_out ${model} ${subj} 
+	feat ${model}/FLAME_cope5_no${subj}.fsf
+	#feat ${model}/${subj}_FE_context.fsf
+done
+
+}
+
+run $1
+# example:
+# $1: model_1_sw

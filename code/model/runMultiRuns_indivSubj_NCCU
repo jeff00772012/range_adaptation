@@ -1,0 +1,27 @@
+#!/bin/sh
+
+#!/bin/bash
+
+# SWU. 2012. Bayesian project.
+# Function to run multiple first-level FEAT for a subject. This function is created specifically
+# for the design of the prospect_theory project.
+
+# The first argument specifies which GLM directory to look for.
+# to look at (e.g. fsf_model_1), the second argument specifies which subject (e.g. subj_001). 
+
+model=$1/fsf
+subj=$2
+analysis_type=$3
+nRuns=6
+
+func_multiRuns() {
+
+
+for run in run_1 run_2 run_3 run_4 run_5 run_6; do
+	#echo $run
+	feat ${model}/${subj}_${run}_${analysis_type}.fsf
+done
+
+}
+
+func_multiRuns $1 $2 $3

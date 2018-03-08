@@ -1,0 +1,25 @@
+#!/bin/sh
+
+#!/bin/bash
+
+# Create 2nd-level .fsf file for a subject. 
+
+model=$1/
+subj=$2
+
+
+temp_subID=TMC
+
+create_fsf() {
+
+	
+sed s/model_3/model_4/g /data2/model_3/2nd_level/${subj}_FE.gfeat/design.fsf > ${model}/${subj}_FE.fsf 
+
+}
+
+# This is to execute the function
+create_fsf $1 $2
+# example:
+# $1: model_2
+# $2: subj_003
+

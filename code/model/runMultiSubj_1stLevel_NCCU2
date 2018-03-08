@@ -1,0 +1,43 @@
+#!/bin/sh
+#!/bin/bash
+
+# Run 1st-level FEAT for multiple subjects.
+# SWU.10.
+
+model=$1
+analysis_type=$2
+echo $model
+
+#fslreadydata_dir=/home/Johnson/FSL_bayesian/FSL_IMG_nii
+
+
+
+path=/data2/data
+filelist=$(ls $path)
+
+
+run() {
+
+#Run 1st-level FEAT for multiple subjects
+#CCK CHH CHY CWL CXY CYY HYC JZC NYC PLL PYL SLY SYC YCL YLG
+# CCK CHH CHY CWL CXY CYY HYC JZC NYC PLL PYL SLY SYC YCL YLG WPY WTC YHC YNH YTH
+#CCK CHH CHY CWL CXY CYY 
+ for subj in HYC JZC NYC PLL PYL SLY SYC YCL YLG; do
+    
+    if (test "$subj" = "CCK"||"$subj" = "CHH"||"$subj" = "CHY"||"$subj" = "CWL"||"$subj" = "CXY"||"$subj" = "CYY"||"$subj" = "HYC"||"$subj" = "JZC"||"$subj" = "NYC"||"$subj" = "PLL"||"$subj" = "PYL"||"$subj" = "SLY"||"$subj" = "SYC"||"$subj" = "YCL"||"$subj" = "YLG") then
+                echo 1
+           	./create_1stLevel_fsf_NCCU2 ${model} ${subj} ${analysis_type}
+    else (test "$subj" = "CC")
+                 echo $subj
+         	./create_1stLevel_fsf_NCCU2 ${model} ${subj} ${analysis_type}
+    fi
+
+	./runMultiRuns_indivSubj_NCCU ${model} ${subj} ${analysis_type}
+done
+
+}
+
+run $1 $2
+# example:
+# $1: model_2
+# $2: analysis type (e.g. all, preproc, glm)

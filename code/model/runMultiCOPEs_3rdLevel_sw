@@ -1,0 +1,41 @@
+#!/bin/sh
+
+#!/bin/bash
+# SWU. 2016. Modified.
+# SWU. 09. 
+# Run multiple copes for 3rd-level (RFX) analysis. 
+
+
+model=$1
+num_copes=$2
+
+#projectPATH=/home/wu_lab/Range_adaptation/NCCU/NCCU_nii_fin
+#analysisPATH=/home/wu_lab/Range_adaptation/NCCU/new_model
+
+run_rfx() {
+
+for cope_num in `seq 1 $num_copes`;
+do
+cope_name=cope$cope_num
+./create_3rdLevel_fsf_sw $model $cope_name
+#echo ${analysisPATH}
+#echo "feat `pwd`/$model/fsf/FLAME_${cope_name}.fsf" | qsub -l walltime=00:30:00;
+#feat ${analysisPATH}/$model/fsf/FLAME_${cope_name}.fsf
+feat $model/fsf/FLAME_${cope_name}.fsf
+done
+
+}
+
+run_rfx $1 $2
+# $1: model
+# $2: number of copes
+# $3: 8
+	
+
+
+
+
+
+
+
+

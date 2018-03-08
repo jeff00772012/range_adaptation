@@ -1,0 +1,33 @@
+#!/bin/sh
+#!/bin/bash
+
+# Run 2nd-level FEAT for multiple subjects.
+# CCT.2012.
+
+model=$1/fsf
+
+echo $model
+
+#fslreadydata_dir=/home/Johnson/FSL_bayesian/FSL_IMG_nii
+
+
+path=/data2/data
+filelist=$(ls $path)
+
+
+run() {
+
+#Run 2nd-level FEAT for multiple subjects
+
+#for subj in $filelist; do
+for subj in YTH YNH YHC YLG; do
+	./create_2ndLevel_fsf_NCCU ${model} ${subj} 
+	feat ${model}/${subj}_FE.fsf
+	#feat ${model}/${subj}_FE_context.fsf
+done
+
+}
+
+run $1
+# example:
+# $1: model_1_sw

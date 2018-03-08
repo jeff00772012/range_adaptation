@@ -1,0 +1,36 @@
+#!/bin/sh
+#!/bin/bash
+#
+# SWU.2016. Modified.
+# SWU.09.
+# Create 3rd-level fsf's based on a template. In 3rd-level setup, each COPE will have a .fsf file.
+
+# This is a function with 2 input arguments. 
+# The first argument is for the fsf directory created
+# specifically for the current GLM model you are using. 
+# The second argument is the COPE (e.g. cope2) you want to replace with.
+
+model=$1
+subj=$2
+
+temp_subID=YTH
+
+create_fsf() {
+
+sed s/${subj}/$temp_subID/g ${model}/template_leave.fsf > ${model}/temp10.fsf 
+sed s/YTHU/${subj}/g ${model}/temp10.fsf > ${model}/FLAME_cope5_no${subj}.fsf 
+#sed s/cope1/$cope/g $model/template_3rd_level.fsf > $model/FLAME_${cope}.fsf
+#sed s/cope1/$cope/g ${analysisPATH}/$model/template_3rd_level.fsf > ${analysisPATH}/$model/FLAME_${cope}.fsf
+#sed s/"cope1.gfeat"/"$cope.gfeat"/g ./$model/template_3rdLevel.fsf > ./$model/temp.fsf
+#sed s/FLAME_cope1/FLAME_$cope/g ./$model/temp.fsf > ./$model/FLAME_${cope}.fsf
+
+}
+
+
+# This is to execute the function
+create_fsf $1 $2
+
+# Example for input arguments.
+# $1: model_1
+# $2: cope2
+
